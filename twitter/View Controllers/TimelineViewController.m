@@ -48,11 +48,6 @@
     // Get timeline (API request)
     [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {
         if (tweets) {
-            NSLog(@"😎😎😎 Successfully loaded home timeline");
-            for (Tweet *tweet in tweets) {
-                NSString *text = tweet.text;
-                NSLog(@"%@", text);
-            }
             // View controllers stores data passed into the completion handler
             self.tweets = tweets;
             
@@ -108,6 +103,18 @@
     [cell.profileImageView setImageWithURL:profilePicUrl];
     cell.profileImageView.layer.masksToBounds = true;
     cell.profileImageView.layer.cornerRadius = 40;
+    
+    if (tweet.favorited) {
+        [cell.likeButton setImage:[UIImage imageNamed: @"favor-icon-red"] forState:UIControlStateNormal];
+    } else {
+        [cell.likeButton setImage:[UIImage imageNamed: @"favor-icon"] forState:UIControlStateNormal];
+    }
+    
+    if (tweet.retweeted) {
+        [cell.retweetButton setImage:[UIImage imageNamed: @"retweet-icon-green"] forState:UIControlStateNormal];
+    } else {
+        [cell.retweetButton setImage:[UIImage imageNamed: @"retweet-icon"] forState:UIControlStateNormal];
+    }
     
     // cellForRowAt returns an instance of the custom cell with that reuse identifier with its elements populated with data at the index asked for
     return cell;

@@ -137,10 +137,13 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="Button" image="reply-icon"/>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9V7-0X-OB3">
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9V7-0X-OB3" userLabel="retweet Button">
                                                     <rect key="frame" x="162" y="142" width="19" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="Button" image="retweet-icon"/>
+                                                    <connections>
+                                                        <action selector="didTapRetweet:" destination="qHe-Qk-9KX" eventType="touchUpInside" id="UJH-EZ-GSw"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DJ8-Fb-Bao">
                                                     <rect key="frame" x="210" y="139" width="24" height="24"/>
@@ -172,6 +175,7 @@
                                             <outlet property="nameLabel" destination="HI9-dR-S54" id="Bdg-Th-rMY"/>
                                             <outlet property="profileImageView" destination="TRE-1W-3HV" id="9L9-px-GYY"/>
                                             <outlet property="replyCount" destination="Fnq-vW-jKz" id="0BB-gu-osR"/>
+                                            <outlet property="retweetButton" destination="9V7-0X-OB3" id="X13-gz-Wjw"/>
                                             <outlet property="retweetCount" destination="PfV-zi-LSc" id="wk2-iy-Z9f"/>
                                             <outlet property="screenNameLabel" destination="LOP-ud-lir" id="Bhe-Dz-Za3"/>
                                         </connections>
