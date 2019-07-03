@@ -7,15 +7,21 @@
 //
 
 #import "TimelineViewController.h"
+#import "ComposeViewController.h"
 #import "APIManager.h"
 #import "TweetCell.h"
 #import "Tweet.h"
 #import "UIImageView+AFNetworking.h"
 
-@interface TimelineViewController () <UITableViewDataSource, UITableViewDelegate>
+// View controller becomes datasource and delegate of the tableView
+@interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 
+// table view asks its dataSource for cellForRowAt and numberOfRows
+
+// View controller has a tableView as a subView
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property(strong, nonatomic) NSArray *tweets;
+@property(strong, nonatomic) NSMutableArray *tweets;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *composeButton;
 
 @end
 
@@ -23,11 +29,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    // Get timeline
+    // Get timeline (API request)
     [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {
         if (tweets) {
             NSLog(@"😎😎😎 Successfully loaded home timeline");
@@ -35,13 +42,17 @@
                 NSString *text = tweet.text;
                 NSLog(@"%@", text);
             }
+            // View controllers stores data passed into the completion handler
             self.tweets = tweets;
+            
+            //Reload the tableView
             [self.tableView reloadData];
         } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
     }];
 }
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 200;
@@ -52,15 +63,17 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    UINavigationController *navigationController = [segue destinationViewController];
+    ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+    composeController.delegate = self;
 }
-*/
 
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -82,11 +95,18 @@
     cell.profileImageView.layer.masksToBounds = true;
     cell.profileImageView.layer.cornerRadius = 40;
     
+    // cellForRowAt returns an instance of the custom cell with that reuse identifier with its elements populated with data at the index asked for
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    //  number of rows returns the number of items returned from the API
     return self.tweets.count;
+}
+
+- (void)didTweet:(nonnull Tweet *)tweet {
+    [self.tweets insertObject: tweet atIndex:0];
+    [self.tableView reloadData];
 }
 
 
