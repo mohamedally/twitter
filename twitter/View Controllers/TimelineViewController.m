@@ -93,6 +93,7 @@
     TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TweetCell"];
     
     Tweet* tweet = self.tweets[indexPath.row];
+    cell.tweet = tweet;
     cell.nameLabel.text = tweet.user.name;
     cell.screenNameLabel.text = [@"@" stringByAppendingString:tweet.user.screenName];
     cell.dateLabel.text = tweet.createdAtString;
