@@ -31,10 +31,13 @@
         [[APIManager shared] unFavorite:self.tweet completion:^(Tweet *tweet, NSError *error) {
             if(error){
                 NSLog(@"Error favoriting tweet: %@", error.localizedDescription);
+            } else {
+                 [self.likeButton setImage:[UIImage imageNamed: @"favor-icon"] forState:UIControlStateNormal];
+                 [self refreshData];
+                
             }
+            
         }];
-        
-        [self.likeButton setImage:[UIImage imageNamed: @"favor-icon"] forState:UIControlStateNormal];
         
     } else {
         self.tweet.favorited = YES;
@@ -43,13 +46,13 @@
         [[APIManager shared] favorite:self.tweet completion:^(Tweet *tweet, NSError *error) {
             if(error){
                 NSLog(@"Error favoriting tweet: %@", error.localizedDescription);
+            } else {
+                 [self.likeButton setImage:[UIImage imageNamed: @"favor-icon-red"] forState:UIControlStateNormal];
+                 [self refreshData];
             }
         }];
         
-        [self.likeButton setImage:[UIImage imageNamed: @"favor-icon-red"] forState:UIControlStateNormal];
     }
-    
-    [self refreshData];
 
 }
 
@@ -62,9 +65,13 @@
             if(error){
                 NSLog(@"Error unretweeting tweet: %@", error.localizedDescription);
             }
+            else  {
+                [self.retweetButton setImage:[UIImage imageNamed:@"retweet-icon"] forState:UIControlStateNormal];
+                [self refreshData];
+            }
         }];
         
-        [self.retweetButton setImage:[UIImage imageNamed:@"retweet-icon"] forState:UIControlStateNormal];
+        
         
     } else {
         self.tweet.retweeted = YES;
@@ -73,13 +80,13 @@
         [[APIManager shared] retweet:self.tweet completion:^(Tweet *tweet, NSError *error) {
             if(error){
                 NSLog(@"Error retweeting tweet: %@", error.localizedDescription);
+            } else {
+                [self.retweetButton setImage:[UIImage imageNamed:@"retweet-icon-green"] forState:UIControlStateNormal];
+                [self refreshData];
             }
         }];
-        
-        [self.retweetButton setImage:[UIImage imageNamed:@"retweet-icon-green"] forState:UIControlStateNormal];
     }
     
-    [self refreshData];
 }
 
 
