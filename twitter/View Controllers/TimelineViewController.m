@@ -64,9 +64,9 @@
 }
 
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 200;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    return 200;
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -95,16 +95,19 @@
     cell.screenNameLabel.text = [@"@" stringByAppendingString:tweet.user.screenName];
     cell.dateLabel.text = tweet.createdAtString;
     cell.bodyLabel.text = tweet.text;
-    cell.replyCount.text = [NSString stringWithFormat:@"%i", tweet.replyCount];
-    cell.favoriteCount.text = [NSString stringWithFormat:@"%i", tweet.favoriteCount];
-    cell.retweetCount.text = [NSString stringWithFormat:@"%i",tweet.retweetCount];
+
+    [cell.likeButton setTitle:[NSString stringWithFormat:@"%i", tweet.favoriteCount] forState:UIControlStateNormal];
+    [cell.retweetButton setTitle:[NSString stringWithFormat:@"%i", tweet.retweetCount] forState:UIControlStateNormal];
+    [cell.replyButton setTitle:[NSString stringWithFormat:@"%i", tweet.replyCount] forState:UIControlStateNormal];
     
     NSString *profilePicString = tweet.user.imageUrl;
     NSURL *profilePicUrl = [NSURL URLWithString:profilePicString];
     
     [cell.profileImageView setImageWithURL:profilePicUrl];
     cell.profileImageView.layer.masksToBounds = true;
-    cell.profileImageView.layer.cornerRadius = 40;
+    
+    NSInteger imageWidth = 56;
+    cell.profileImageView.layer.cornerRadius = imageWidth/2;
     
     if (tweet.favorited) {
         [cell.likeButton setImage:[UIImage imageNamed: @"favor-icon-red"] forState:UIControlStateNormal];

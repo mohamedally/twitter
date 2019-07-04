@@ -91,8 +91,11 @@
 
 
 - (void) refreshData {
-    self.favoriteCount.text = [NSString stringWithFormat:@"%i", self.tweet.favoriteCount];
-    self.retweetCount.text = [NSString stringWithFormat:@"%i", self.tweet.retweetCount];
+    [self.likeButton setTitle:[NSString stringWithFormat:@"%i", self.tweet.favoriteCount] forState:UIControlStateNormal];
+    
+    [self.retweetButton setTitle:[NSString stringWithFormat:@"%i", self.tweet.retweetCount] forState:UIControlStateNormal];
+    
+    
 }
 
 @end
