@@ -8,6 +8,7 @@
 
 #import "TimelineViewController.h"
 #import "ComposeViewController.h"
+#import "DetailsViewController.h"
 #import "APIManager.h"
 #import "TweetCell.h"
 #import "Tweet.h"
@@ -17,7 +18,7 @@
 #import "DateTools.h"
 
 // View controller becomes datasource and delegate of the tableView
-@interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface TimelineViewController () <ComposeViewControllerDelegate,  UITableViewDataSource, UITableViewDelegate>
 
 // table view asks its dataSource for cellForRowAt and numberOfRows
 
@@ -82,9 +83,22 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    UINavigationController *navigationController = [segue destinationViewController];
-    ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
-    composeController.delegate = self;
+
+    if ([segue.identifier isEqualToString:@"composeSegue"]) {
+        
+        UINavigationController *navigationController = [segue destinationViewController];
+        ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+        composeController.delegate = self;
+        
+    } else if ([segue.identifier isEqualToString:@"detailsSegue"]) {
+        
+        DetailsViewController *detailsController = [segue destinationViewController];
+        
+        UITableViewCell *tappedCell = sender;
+        NSIndexPath *indexPath =  [self.tableView indexPathForCell:tappedCell];
+        Tweet *tweet = self.tweets[indexPath.row];
+        detailsController.tweet = tweet;
+    }
 }
 
 
