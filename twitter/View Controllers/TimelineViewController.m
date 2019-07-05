@@ -14,6 +14,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "DateTools.h"
 
 // View controller becomes datasource and delegate of the tableView
 @interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
@@ -38,6 +39,7 @@
     self.tableView.delegate = self;
     
     [self fetchTimeline];
+    
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(fetchTimeline) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
@@ -95,7 +97,32 @@
     cell.screenNameLabel.text = [@"@" stringByAppendingString:tweet.user.screenName];
     cell.dateLabel.text = tweet.createdAtString;
     cell.bodyLabel.text = tweet.text;
-
+    
+    
+    NSString *timeAgo;
+    NSDate *now = [NSDate date];
+    NSDate *tweetDate = tweet.createdAtDate;
+    long monthDiff = [now monthsFrom:tweetDate];
+    long dayDiff = [now daysFrom:tweetDate];
+    long hourDiff = [now hoursFrom:tweetDate];
+    long minuteDiff = [now minutesFrom:tweetDate];
+    long secondDiff = [now secondsFrom:tweetDate];
+    
+    if (monthDiff == 0){
+        
+        if (dayDiff != 0){
+            timeAgo = [[NSString stringWithFormat:@"%lu", dayDiff] stringByAppendingString:@"d"];
+        } else if (hourDiff != 0){
+            timeAgo = [[NSString stringWithFormat:@"%lu", hourDiff] stringByAppendingString:@"h"];
+        } else if (minuteDiff != 0){
+            timeAgo = [[NSString stringWithFormat:@"%lu", minuteDiff] stringByAppendingString:@"m"];
+        } else {
+            timeAgo = [[NSString stringWithFormat:@"%lu", secondDiff] stringByAppendingString:@"s"];
+        }
+        
+        cell.dateLabel.text = timeAgo;
+    }
+    
     [cell.likeButton setTitle:[NSString stringWithFormat:@"%i", tweet.favoriteCount] forState:UIControlStateNormal];
     [cell.retweetButton setTitle:[NSString stringWithFormat:@"%i", tweet.retweetCount] forState:UIControlStateNormal];
     [cell.replyButton setTitle:[NSString stringWithFormat:@"%i", tweet.replyCount] forState:UIControlStateNormal];
